@@ -15,45 +15,25 @@ print("La probabilidad de que se obtenga 10 personas de cada categoria es ", pro
 
 #La otra forma es hacer una simulación estilo Monte Carlo
 
-import random
-
-def unir1(color, numero):
-    return {color + str(n + 1) for n in range(numero)}
-
-aldea = list(unir1('V', 50) | unir1('M', 30) | unir1('N', 20)) # Aquí se crea la urna con las 50 
-
-muestra = {tuple(random.choices(aldea, k = 30)) for i in range(20000000)} # Se escogió ese rango porque más allá de eso ocupa toda la memoria RAM
-
-def categoria10(evento): #Esta función entrega la muestra que contenga 10 personas de cada categoría
-    s = [i[0] for i in evento]
-    return s.count('V') == 10 and s.count('M') == 10 and s.count('N') == 10
-
-def prob(evento, espacio): # Función para calcular probabilidad
-    return (len(evento & espacio)/len(espacio))
-
-categoria = {e for e in muestra if categoria10(e)}
-prob(categoria, muestra) # Aquí se entrega la probabilidad usando simulaciones
-
-import matplotlib.pyplot as plt
 import numpy as np
 
-#En esta parte se grafica a cuanto tiende la probabilidad 
+simulaciones = 100000
+personas_v = 50  #Personas que dicen la verdad
+personas_m = 30  #Persoans que mienten
+personas_n = 20  #Personas que se niegan a responder
 
-sims = 10
-puntos = 500000
-probs = np.zeros(sims)
+def crear_simulacion(): # Esta función crea una simulación donde las muestras son de tamaño 30 y se verifica si contiene 10 personas de cada categoria
+    poblacion = ['V'] * personas_v + ['M'] * personas_m + ['N'] * personas_n
+    muestra = np.random.choice(poblacion, size=30, replace=False)
+    verdades = np.sum(muestra == 'V')
+    mentiras = np.sum(muestra == 'M')
+    no_responde = np.sum(muestra == 'N')
+    return (verdades == 10) and (mentiras == 10) and (no_responde == 10)
 
-for i in range(sims):
-    muestra = {tuple(random.choices(aldea, k = 30)) for i in range(puntos)}
-    categoria = {e for e in muestra if categoria10(e)}
-    probs[i] = prob(categoria, muestra)
+simulacion = [crear_simulacion() for i in range(simulaciones)]
 
-plt.plot(np.arange(sims), probs)
+probabilidad_promedio = np.mean(simulacion) #Aquí se calcula el promedio de la probabilidad de la simulación
+print('Según las', simulaciones,' simulaciones, la probabilidad de que la muestra contenga 10 personas de cada categoria es', probabilidad_promedio)
 
-probs.mean() # Se imprime el promedio de las probabilidades
-
-probs.std()/probs.mean()
-
-abs(probabilidad - probs.mean())/probabilidad # Aqui se calcula el error de la probabilidad comparando el valor real con la obtenida en la simulación
-
-# El error que se comete es muy grande porque existen 2.937233982161094e+25 maneras de escoger 30 personas de un total de 100, y una muestra de 20000000 sigue siendo muy pequeño para este problema.
+error = abs(probabilidad - probabilidad_promedio)/probabilidad #Error que se comete cuando se compara la probabilidad real con la de la simulación 
+print('Se comete un error de',"%.2f" % (error*100),'%')
