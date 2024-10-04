@@ -4,3 +4,4 @@ while True:
              palabra = str(input("escriba algo:"))
              if palabra == "salir":
                      break
+#Nota: 70. Favor mandar las tareas en formato ipynb

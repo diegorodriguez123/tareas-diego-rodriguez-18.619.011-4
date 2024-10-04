@@ -29,3 +29,5 @@ plt.title('Distribución de velocidades de las partículas en 10 segundos')
 plt.xlabel('Velocidad en términos de c')
 plt.ylabel('Cantidad de eventos')
 plt.grid(True)
+
+#Nota: 70 enviar las tareas en formato ipynb

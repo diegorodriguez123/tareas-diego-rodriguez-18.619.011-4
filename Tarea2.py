@@ -37,3 +37,5 @@ print('Según las', simulaciones,' simulaciones, la probabilidad de que la muest
 
 error = abs(probabilidad - probabilidad_promedio)/probabilidad #Error que se comete cuando se compara la probabilidad real con la de la simulación 
 print('Se comete un error de',"%.2f" % (error*100),'%')
+
+#Nota: 70, mandar las tareas en un jupyter notebook por favor.
