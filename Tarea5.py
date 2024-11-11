@@ -57,3 +57,5 @@ print(f"Luego de {iteraciones} iteraciones, el cero de la función es {cero}")
 
 if errores[len(errores)-1] <= cota:
     print(f"La cota teórica es {cota}, y es menor o igual al último error de la iteración")
+
+#NOTA: 70
